@@ -1,4 +1,10 @@
-import express from 'express'
+import express, { json } from 'express'
+// server.js
+import pkg from '@prisma/client';
+const { PrismaClient } = pkg;
+
+const prisma = new PrismaClient();
+
 
 const app = express()
 app.use(express.json())
@@ -10,16 +16,20 @@ app.get('/', (req, res) => {
   res.send('Olá, mundo!')
 })
 
-app.post('/users', (req, res) => {
+app.post('/users', async (req, res) => {
 
-  users.push(req.body)
+  await prisma.user.create({
+    email: req.body.email,
+    name: req.body.name,
+    age: req.body.age
+  })
 
-  res.send('Ok, deu certo')
+  res.status(201),json(req.body)
 })
 
 // rota /users
 app.get('/users', (req, res) => {
-  res.json(users)
+  res.status(200).json(users)
 })
 
 app.listen(3000, () => {
