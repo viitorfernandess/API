@@ -14,7 +14,7 @@ app.post('/users', (req, res) => {
 
   users.push(req.body)
 
-  res.send('Ok, post')
+  res.send('Ok, deu certo')
 })
 
 // rota /users
