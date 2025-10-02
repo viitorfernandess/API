@@ -53,7 +53,7 @@ app.put('/users/:id', async (req, res) => {
   }
 })
 
-// rota /users
+// Rota /Users
 app.get('/users', async (req, res) => {
   try {
     const users = await prisma.user.findMany()
@@ -62,6 +62,16 @@ app.get('/users', async (req, res) => {
     console.error(error)
     res.status(500).json({ error: 'Erro ao buscar usuários' })
   }
+})
+
+// Rota  /Delete
+app.delete('/users/:id', async (req, res) => {
+  await prisma.user.delete({
+    where: {
+      id: req.params.id
+    }
+  })
+  res.status(200).json({ message: "Usuário deletado com sucesso." })
 })
 
 app.listen(3000, () => {
