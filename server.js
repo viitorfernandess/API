@@ -17,19 +17,31 @@ app.get('/', (req, res) => {
 })
 
 app.post('/users', async (req, res) => {
-
-  await prisma.user.create({
-    email: req.body.email,
-    name: req.body.name,
-    age: req.body.age
-  })
-
-  res.status(201),json(req.body)
+  try {
+    const user = await prisma.user.create({
+      data: {
+        email: req.body.email,
+        name: req.body.name,
+        age: req.body.age
+      }
+    })
+    res.status(201).json(user)
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({ error: 'Erro ao criar usuário' })
+  }
 })
 
+
 // rota /users
-app.get('/users', (req, res) => {
-  res.status(200).json(users)
+app.get('/users', async (req, res) => {
+  try {
+    const users = await prisma.user.findMany()
+    res.status(200).json(users)
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({ error: 'Erro ao buscar usuários' })
+  }
 })
 
 app.listen(3000, () => {
