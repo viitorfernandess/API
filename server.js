@@ -16,6 +16,7 @@ app.get('/', (req, res) => {
   res.send('Olá, mundo!')
 })
 
+// Rota POST / Adiciona user
 app.post('/users', async (req, res) => {
   try {
     const user = await prisma.user.create({
@@ -32,6 +33,25 @@ app.post('/users', async (req, res) => {
   }
 })
 
+// Rota PUT / Adiciona user
+app.put('/users/:id', async (req, res) => {
+  try {
+    const user = await prisma.user.update({
+      where: {
+        id: req.params.id
+      },
+      data: {
+        email: req.body.email,
+        name: req.body.name,
+        age: req.body.age
+      }
+    })
+    res.status(201).json(user)
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({ error: 'Erro ao editar usuário' })
+  }
+})
 
 // rota /users
 app.get('/users', async (req, res) => {
